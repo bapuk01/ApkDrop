@@ -126,3 +126,5 @@ ApkDrop ставится и на Android TV. Он виден в лаунчере
 cd android && gradlew assembleDebug
 dotnet publish pc/ApkDrop.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o dist
 ```
+## Поддержка
+Буду рад поддержке, СПС, THX <3 (https://www.donationalerts.com/r/bapuk01)
