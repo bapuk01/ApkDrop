@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>ApkDrop — инструкция</title>
+<style>
+  @page { size: A4; margin: 13mm 14mm 12mm 14mm; }
+  :root {
+    --green: #2E7D32;
+    --green-dark: #1B5E20;
+    --green-soft: #E8F3E9;
+    --ink: #1F2328;
+    --muted: #5B6470;
+    --line: #D9DEE3;
+    --warn: #9A5B00;
+    --warn-soft: #FFF4E0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 9.6pt;
+    line-height: 1.38;
+    color: var(--ink);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .page { page-break-after: always; break-after: page; }
+  .page:last-child { page-break-after: auto; break-after: auto; }
+
+  header.top {
+    display: flex; align-items: center; gap: 12px;
+    padding-bottom: 8px; margin-bottom: 10px;
+    border-bottom: 2.5px solid var(--green);
+  }
+  .logo {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--green); flex: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  header h1 { margin: 0; font-size: 20pt; line-height: 1.1; letter-spacing: -0.3px; }
+  header p { margin: 2px 0 0; color: var(--muted); font-size: 10pt; }
+  header .ver { margin-left: auto; text-align: right; color: var(--muted); font-size: 8.5pt; }
+
+  .parts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .part {
+    border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px;
+    background: #FAFBFC;
+  }
+  .part b { color: var(--green-dark); }
+  .part code { font-size: 8.8pt; }
+
+  section { margin-bottom: 9px; break-inside: avoid; }
+  h2 {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12pt; margin: 0 0 5px; color: var(--green-dark);
+  }
+  h2 .n {
+    width: 21px; height: 21px; border-radius: 50%;
+    background: var(--green); color: #fff; font-size: 10pt;
+    display: inline-flex; align-items: center; justify-content: center; flex: none;
+  }
+  h3 { font-size: 10pt; margin: 6px 0 3px; }
+  ol, ul { margin: 0; padding-left: 18px; }
+  li { margin: 1.5px 0; }
+  p { margin: 3px 0; }
+  code, .kbd {
+    font-family: Consolas, "Cascadia Mono", monospace; font-size: 9pt;
+    background: #F1F3F5; border-radius: 3px; padding: 0 3px;
+  }
+  .ui { font-weight: 600; white-space: nowrap; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .note, .tip {
+    border-radius: 6px; padding: 5px 9px; margin: 5px 0 0; font-size: 9pt;
+  }
+  .tip { background: var(--green-soft); border-left: 3px solid var(--green); }
+  .note { background: var(--warn-soft); border-left: 3px solid #E0A030; }
+  .note b { color: var(--warn); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  th, td { text-align: left; vertical-align: top; padding: 4px 7px; border-bottom: 1px solid var(--line); }
+  th { background: var(--green-soft); color: var(--green-dark); font-weight: 600; }
+  td:first-child { width: 36%; font-weight: 600; }
+  .yes { color: var(--green); font-weight: 700; }
+  .tap { color: var(--warn); font-weight: 700; }
+
+  footer {
+    margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 8.3pt;
+  }
+</style>
+</head>
+<body>
+
+<!-- ======================= СТРАНИЦА 1 ======================= -->
+<div class="page">
+  <header class="top">
+    <div class="logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v11M7 9.5l5 5 5-5M5 20h14"/>
+      </svg>
+    </div>
+    <div>
+      <h1>ApkDrop — краткая инструкция</h1>
+      <p>Установка и обновление APK на телефоны и Android TV по Wi-Fi</p>
+    </div>
+    <div class="ver">ПК-клиент 1.6<br>ApkDrop на телефоне 1.6<br>© Bapuk01</div>
+  </header>
+
+  <div class="parts">
+    <div class="part"><b>На компьютере</b> — <code>dist\ApkDrop.exe</code>.<br>
+      Находит телефоны, отправляет APK и следит за новыми сборками.</div>
+    <div class="part"><b>На телефоне / TV</b> — <code>dist\ApkDrop-android.apk</code>.<br>
+      Принимает файл по Wi-Fi и сразу ставит или обновляет приложение.</div>
+  </div>
+
+  <section>
+    <h2><span class="n">1</span>Первый запуск на телефоне (один раз)</h2>
+    <ol>
+      <li>Установите <code>ApkDrop-android.apk</code>: скопируйте файл на телефон и откройте его, или <code>adb install</code>.</li>
+      <li>Откройте ApkDrop. Переключатель <span class="ui">Приём APK</span> должен быть включён, под ним виден адрес телефона и <b>PIN</b>.</li>
+      <li>В блоке <span class="ui">Настройка</span> нажмите <span class="ui">Разрешить</span> у каждого пункта с красным крестиком:
+        <ul>
+          <li><b>Установка приложений</b> — обязательно, без неё ничего не встанет;</li>
+          <li><b>Работа в фоне</b> и <b>Уведомления</b> — чтобы приём не засыпал и запрос подтверждения доходил.</li>
+        </ul>
+      </li>
+    </ol>
+    <div class="tip">Телефон и компьютер должны быть в <b>одной Wi-Fi сети</b>. В гостевых сетях с изоляцией устройств они друг друга не видят.</div>
+  </section>
+
+  <section>
+    <h2><span class="n">2</span>Первый запуск на компьютере</h2>
+    <ol>
+      <li>Запустите <code>dist\ApkDrop.exe</code>. В заголовке окна видны версия и дата сборки — так легко убедиться, что запущен свежий файл.</li>
+      <li>Программа сама ищет телефоны. Если телефона нет в списке — <span class="ui">Найти телефоны</span> или <span class="ui">Добавить по IP…</span> (адрес показан в ApkDrop на телефоне).</li>
+      <li>При первой отправке введите <b>PIN</b> с экрана телефона. Он запоминается, повторно спрашивать не будет.</li>
+      <li><b>Галочка</b> у телефона в списке — «сюда устанавливать».</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2><span class="n">3</span>Отправить APK вручную — вкладка «Отправка APK»</h2>
+    <div class="two">
+      <div>
+        <h3>Самый быстрый способ</h3>
+        <p><b>Перетащите файл <code>.apk</code> в окно</b> — он сразу уйдёт на все отмеченные телефоны.</p>
+        <p>Или <span class="ui">Выбрать APK…</span> → <span class="ui">Установить на телефон</span>.</p>
+        <p>Прогресс и результат видны в журнале внизу окна и в колонке <span class="ui">Статус</span>.</p>
+      </div>
+      <div>
+        <h3>Полезные галочки</h3>
+        <ul>
+          <li><b>Следить за файлом</b> — каждая новая сборка выбранного APK ставится на телефон сама. Удобно для <code>app\build\outputs\apk\debug\app-debug.apk</code>.</li>
+          <li><b>Запускать приложение после установки</b> — сразу откроет его на телефоне.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">4</span>Когда на телефоне нужно нажать «Установить»</h2>
+    <table>
+      <tr><th>Ситуация</th><th>Что будет</th></tr>
+      <tr><td>Первая установка приложения</td><td><span class="tap">Одно нажатие</span> «Установить» — так требует Android.</td></tr>
+      <tr><td>Обновление на Android 12+, приложение ставилось через ApkDrop</td><td><span class="yes">Молча</span>, без вопросов.</td></tr>
+      <tr><td>Приложение последний раз ставилось не через ApkDrop (например, кнопкой Run в Android Studio)</td><td><span class="tap">Одно нажатие</span> в этот раз, дальше обновления снова молча.</td></tr>
+      <tr><td>Android 8–11</td><td><span class="tap">Нажатие</span> при каждой установке.</td></tr>
+    </table>
+    <div class="note"><b>Google Play Protect</b> может предложить «проверить приложение». Чтобы поставить без проверки, нажмите <span class="ui">Подробнее</span> → <span class="ui">Установить без проверки</span>.</div>
+  </section>
+</div>
+
+<!-- ======================= СТРАНИЦА 2 ======================= -->
+<div class="page">
+  <section>
+    <h2><span class="n">5</span>Автообновление — вкладка «Автообновление»</h2>
+    <p>Список приложений, за которыми следит компьютер. Как только в источнике появляется новая сборка, она сама уходит на нужные телефоны.</p>
+    <div class="two">
+      <div>
+        <h3>Добавить приложение</h3>
+        <ul>
+          <li><span class="ui">Добавить APK…</span> — следить за конкретным файлом;</li>
+          <li><span class="ui">Добавить папку…</span> — следить за папкой сборок, например <code>app\build\outputs\apk</code>;</li>
+          <li>или просто перетащите файл/папку на эту вкладку.</li>
+        </ul>
+        <h3>Выбрать телефоны — кнопка «Телефоны…»</h3>
+        <ul>
+          <li><b>Все отмеченные</b> — телефоны с галочкой в главном списке;</li>
+          <li><b>Только выбранные</b> — свой набор для каждого приложения;</li>
+          <li><b>Устанавливать, если приложения нет</b> — иначе приложение только обновляется там, где уже стоит.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Что считается новой версией</h3>
+        <ul>
+          <li>Сборка с бо́льшим <b>versionCode</b>;</li>
+          <li>или сборка с <b>тем же versionCode</b>, но другим содержимым, собранная позже последней установки на телефоне.</li>
+        </ul>
+        <h3>Когда проверяется</h3>
+        <p>Сразу при изменении файлов в источнике и каждые 2 минуты — телефон, который был вне сети, получит обновление, когда вернётся.</p>
+        <h3>Колонки списка</h3>
+        <p><span class="ui">Версия в источнике</span> — версия и дата сборки; <span class="ui">На телефонах</span> — что стоит на каждом телефоне (✔ — актуально).</p>
+      </div>
+    </div>
+    <div class="tip">Если телефон отказался от обновления (нажали «Отмена» или не подтвердили за 5 минут), эта сборка больше не предлагается ему сама.
+      Повторить — кнопка <span class="ui">Проверить сейчас</span>. Устаревший ApkDrop на телефоне компьютер обновляет сам.</div>
+  </section>
+
+  <section>
+    <h2><span class="n">6</span>Android TV</h2>
+    <ul>
+      <li>ApkDrop виден в лаунчере телевизора с баннером — его можно добавить в избранное на главный экран.</li>
+      <li>Управление пультом: элемент в фокусе обведён зелёной рамкой.</li>
+      <li>«Установка неизвестных приложений» на TV обычно здесь: <span class="ui">Настройки → Настройки устройства → Безопасность и ограничения → Неизвестные источники</span>.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="n">7</span>Если что-то не так</h2>
+    <table>
+      <tr><th>Проблема</th><th>Что делать</th></tr>
+      <tr><td>Телефон «не найден» / «не в сети»</td><td>Откройте ApkDrop на телефоне, проверьте, что <span class="ui">Приём APK</span> включён и телефон в той же Wi-Fi сети. Можно <span class="ui">Добавить по IP…</span></td></tr>
+      <tr><td>«Нужен PIN» или «PIN заблокирован»</td><td><span class="ui">Ввести PIN…</span> — PIN с экрана телефона. После 5 неверных попыток приём блокируется на минуту.</td></tr>
+      <tr><td>«Подпись отличается» / «другая подпись»</td><td>На телефоне стоит сборка с другим ключом (например, debug вместо release). Поверх она не встанет — удалите приложение на телефоне и установите заново (данные приложения удалятся).</td></tr>
+      <tr><td>«На телефоне версия новее»</td><td>Android не даёт понизить versionCode. Поднимите versionCode в сборке или удалите приложение на телефоне.</td></tr>
+      <tr><td>Автообновление не видит новую сборку</td><td>Проверьте версию в заголовке окна (нужна 1.4+) и что ApkDrop на телефоне 1.3+. Надёжнее всего — повышать versionCode при каждой сборке.</td></tr>
+      <tr><td>Ошибка «testOnly»</td><td>Это сборка из кнопки Run. Соберите APK через <span class="ui">Build → Build APK(s)</span> или <code>gradlew assembleDebug</code>.</td></tr>
+      <tr><td>Окно «Установить» не появилось</td><td>Оно пришло уведомлением «Подтвердите установку». Чтобы появлялось само — держите ApkDrop на телефоне открытым.</td></tr>
+    </table>
+  </section>
+
+  <footer>
+    Сеть: TCP 8765 — приём файлов, UDP 8766 — поиск телефонов. Настройки ПК: <code>%APPDATA%\ApkDrop\settings.json</code>
+    (или <code>settings.json</code> рядом с <code>ApkDrop.exe</code> — портативный режим).
+    Без ПК-программы: <code>curl -T app.apk -H "X-Pin: PIN" http://IP-телефона:8765/install</code>
+    <span style="float:right">© Bapuk01</span>
+  </footer>
+</div>
+
+</body>
+</html>

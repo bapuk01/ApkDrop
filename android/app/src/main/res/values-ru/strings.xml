@@ -1,0 +1,72 @@
+<resources>
+    <!-- Сервис и уведомления -->
+    <string name="channel_service">Сервер ApkDrop</string>
+    <string name="channel_confirm">Подтверждение установки</string>
+    <string name="notif_no_wifi">Нет подключения к Wi-Fi</string>
+    <string name="notif_waiting">Жду APK на %s</string>
+    <string name="notif_confirm_title">Подтвердите установку</string>
+    <string name="action_stop">Остановить</string>
+    <string name="no_network">нет сети</string>
+    <string name="log_server_started">Сервер запущен: %s</string>
+    <string name="log_server_stopped">Сервер остановлен</string>
+    <string name="log_port_failed">Не удалось открыть порт %1$d: %2$s</string>
+    <string name="log_discovery_failed">Автопоиск недоступен (порт %1$d): %2$s. Добавьте телефон на ПК по IP.</string>
+
+    <!-- Ответы ПК-клиенту -->
+    <string name="err_not_found">Нет такого адреса: %s</string>
+    <string name="err_pin_locked">Слишком много неверных PIN, подождите минуту</string>
+    <string name="err_pin_required">Нужен PIN</string>
+    <string name="err_pin_wrong">Неверный PIN</string>
+    <string name="log_pin_locked">5 неверных PIN подряд — приём заблокирован на минуту</string>
+    <string name="err_length_required">Нужен заголовок Content-Length</string>
+    <string name="err_empty_file">Пустой файл</string>
+    <string name="err_no_space">Не хватает места на телефоне</string>
+
+    <!-- Установка -->
+    <string name="install_error">Ошибка установки: %s</string>
+    <string name="not_apk">Файл не является корректным APK</string>
+    <string name="log_received">Получен %1$s (%2$d КБ)</string>
+    <string name="confirm_timeout">Не дождались подтверждения на телефоне за %d мин</string>
+    <string name="no_confirm_window">Система не выдала окно подтверждения</string>
+    <string name="confirm_on_phone">Подтвердите установку на телефоне</string>
+    <string name="installed_fmt">Установлено: %s</string>
+    <string name="updated_fmt">Обновлено: %s</string>
+    <string name="launch_self">ApkDrop перезапускается сам</string>
+    <string name="launch_no_icon">у приложения нет значка запуска</string>
+    <string name="launch_blocked">Android блокирует запуск из фона — чтобы приложения запускались сами, держите ApkDrop открытым на телефоне</string>
+    <string name="fail_signature">подпись APK отличается от установленной версии — удалите приложение на телефоне и повторите</string>
+    <string name="fail_downgrade">на телефоне стоит более новая версия (versionCode больше) — поднимите versionCode или удалите приложение</string>
+    <string name="fail_storage">не хватает места на телефоне</string>
+    <string name="fail_older_sdk">APK требует более новую версию Android</string>
+    <string name="fail_abi">APK собран не под процессор этого телефона</string>
+    <string name="fail_test_only">APK помечен testOnly (собран кнопкой Run) — соберите через Build → Build APK</string>
+    <string name="fail_aborted">установка отменена на телефоне</string>
+    <string name="fail_blocked">установка заблокирована системой</string>
+    <string name="fail_conflict">конфликт с установленным приложением</string>
+    <string name="fail_incompatible">APK несовместим с этим телефоном</string>
+    <string name="fail_invalid">APK повреждён или некорректен</string>
+    <string name="fail_storage_error">ошибка хранилища</string>
+    <string name="fail_generic">ошибка установки</string>
+
+    <!-- Экран -->
+    <string name="ui_receive">Приём APK</string>
+    <string name="ui_receive_off">Выключен — ПК не сможет отправить файл</string>
+    <string name="ui_pin_label">PIN для ПК</string>
+    <string name="ui_change">Сменить</string>
+    <string name="ui_setup">Настройка</string>
+    <string name="ui_allow">Разрешить</string>
+    <string name="perm_install_title">Установка приложений</string>
+    <string name="perm_install_hint">Разрешение «Установка неизвестных приложений» для ApkDrop</string>
+    <string name="perm_notif_title">Уведомления</string>
+    <string name="perm_notif_hint">Чтобы запрос подтверждения пришёл, когда ApkDrop свёрнут</string>
+    <string name="perm_battery_title">Работа в фоне</string>
+    <string name="perm_battery_hint">Без ограничений батареи — чтобы сервер не засыпал</string>
+    <string name="autostart_title">Запускать при включении</string>
+    <string name="autostart_hint">Сервер стартует после перезагрузки</string>
+    <string name="silent_yes">Тихие обновления: да. Первая установка приложения — одно нажатие «Установить», дальнейшие обновления ставятся без вопросов.</string>
+    <string name="silent_no">Тихие обновления: нет (нужен Android 12+). Каждую установку нужно подтвердить.</string>
+    <string name="ui_language">Язык</string>
+    <string name="ui_language_system">Как в системе</string>
+    <string name="ui_log">Журнал</string>
+    <string name="ui_log_empty">Пока пусто. На ПК запустите ApkDrop и перетащите APK в окно.</string>
+</resources>

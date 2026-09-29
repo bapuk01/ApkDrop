@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <AssemblyName>ApkDrop</AssemblyName>
+    <RootNamespace>ApkDrop</RootNamespace>
+    <Version>1.6.0</Version>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <Product>ApkDrop</Product>
+    <Authors>Bapuk01</Authors>
+    <Company>Bapuk01</Company>
+    <Copyright>© Bapuk01</Copyright>
+    <Description>Установка и обновление APK на телефоны и Android TV по Wi-Fi</Description>
+  </PropertyGroup>
+
+</Project>

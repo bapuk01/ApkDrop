@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">ApkDrop</string>
+
+    <!-- Сервис и уведомления -->
+    <string name="channel_service">ApkDrop server</string>
+    <string name="channel_confirm">Install confirmation</string>
+    <string name="notif_no_wifi">No Wi-Fi connection</string>
+    <string name="notif_waiting">Waiting for APK at %s</string>
+    <string name="notif_confirm_title">Confirm installation</string>
+    <string name="action_stop">Stop</string>
+    <string name="no_network">no network</string>
+    <string name="log_server_started">Server started: %s</string>
+    <string name="log_server_stopped">Server stopped</string>
+    <string name="log_port_failed">Could not open port %1$d: %2$s</string>
+    <string name="log_discovery_failed">Auto-discovery is unavailable (port %1$d): %2$s. Add the phone on the PC by IP.</string>
+
+    <!-- Ответы ПК-клиенту -->
+    <string name="err_not_found">No such address: %s</string>
+    <string name="err_pin_locked">Too many wrong PINs, wait a minute</string>
+    <string name="err_pin_required">PIN required</string>
+    <string name="err_pin_wrong">Wrong PIN</string>
+    <string name="log_pin_locked">5 wrong PINs in a row — receiving is blocked for a minute</string>
+    <string name="err_length_required">The Content-Length header is required</string>
+    <string name="err_empty_file">Empty file</string>
+    <string name="err_no_space">Not enough space on the phone</string>
+
+    <!-- Установка -->
+    <string name="install_error">Install error: %s</string>
+    <string name="not_apk">The file is not a valid APK</string>
+    <string name="log_received">Received %1$s (%2$d KB)</string>
+    <string name="confirm_timeout">No confirmation on the phone within %d min</string>
+    <string name="no_confirm_window">The system did not show a confirmation window</string>
+    <string name="confirm_on_phone">Confirm the install on the phone</string>
+    <string name="installed_fmt">Installed: %s</string>
+    <string name="updated_fmt">Updated: %s</string>
+    <string name="launch_self">ApkDrop restarts by itself</string>
+    <string name="launch_no_icon">the app has no launcher icon</string>
+    <string name="launch_blocked">Android blocks launching from the background — keep ApkDrop open on the phone to launch apps automatically</string>
+    <string name="fail_signature">the APK signature differs from the installed version — uninstall the app on the phone and try again</string>
+    <string name="fail_downgrade">the phone has a newer version (higher versionCode) — raise the versionCode or uninstall the app</string>
+    <string name="fail_storage">not enough space on the phone</string>
+    <string name="fail_older_sdk">the APK needs a newer Android version</string>
+    <string name="fail_abi">the APK is not built for this phone\'s processor</string>
+    <string name="fail_test_only">the APK is marked testOnly (built with the Run button) — build it via Build → Build APK</string>
+    <string name="fail_aborted">the install was cancelled on the phone</string>
+    <string name="fail_blocked">the install was blocked by the system</string>
+    <string name="fail_conflict">conflict with the installed app</string>
+    <string name="fail_incompatible">the APK is not compatible with this phone</string>
+    <string name="fail_invalid">the APK is damaged or invalid</string>
+    <string name="fail_storage_error">storage error</string>
+    <string name="fail_generic">install error</string>
+
+    <!-- Экран -->
+    <string name="ui_receive">Receive APK</string>
+    <string name="ui_receive_off">Off — the PC cannot send files</string>
+    <string name="ui_pin_label">PIN for the PC</string>
+    <string name="ui_change">Change</string>
+    <string name="ui_setup">Setup</string>
+    <string name="ui_allow">Allow</string>
+    <string name="perm_install_title">Install apps</string>
+    <string name="perm_install_hint">The “Install unknown apps” permission for ApkDrop</string>
+    <string name="perm_notif_title">Notifications</string>
+    <string name="perm_notif_hint">So the confirmation request arrives when ApkDrop is in the background</string>
+    <string name="perm_battery_title">Run in background</string>
+    <string name="perm_battery_hint">No battery restrictions — so the server does not fall asleep</string>
+    <string name="autostart_title">Start on boot</string>
+    <string name="autostart_hint">The server starts after a reboot</string>
+    <string name="silent_yes">Silent updates: yes. The first install of an app takes one tap on “Install”; later updates install without asking.</string>
+    <string name="silent_no">Silent updates: no (Android 12+ needed). Every install has to be confirmed.</string>
+    <string name="ui_language">Language</string>
+    <string name="ui_language_system">System default</string>
+    <string name="ui_log">Log</string>
+    <string name="ui_log_empty">Nothing yet. On the PC, start ApkDrop and drop an APK onto the window.</string>
+</resources>
