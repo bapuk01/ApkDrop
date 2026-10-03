@@ -91,6 +91,10 @@ public sealed partial class MainForm
         appsList.DoubleClick += async (_, _) => await EditTargetsAsync();
         var menu = new ContextMenuStrip();
         menu.Items.Add(T("Телефоны…", "Phones…"), null, async (_, _) => await EditTargetsAsync());
+        var source = new ToolStripMenuItem(T("Изменить адрес APK", "Change APK location"));
+        source.DropDownItems.Add(T("APK-файл…", "APK file…"), null, async (_, _) => await ChangeSourceAsync(folder: false));
+        source.DropDownItems.Add(T("Папка со сборками…", "Builds folder…"), null, async (_, _) => await ChangeSourceAsync(folder: true));
+        menu.Items.Add(source);
         menu.Items.Add(T("Показать APK в Проводнике", "Show APK in Explorer"), null, (_, _) =>
         {
             if (SelectedApps().FirstOrDefault() is not { } app) return;
@@ -190,6 +194,76 @@ public sealed partial class MainForm
 
     List<TrackedApp> SelectedApps() =>
         appsList.SelectedItems.Cast<ListViewItem>().Select(i => i.Tag).OfType<TrackedApp>().ToList();
+
+    /// <summary>
+    /// Меняет APK-файл или папку со сборками у выделенных приложений — например, после переноса проекта.
+    /// Новый адрес принимается, только если в нём есть APK именно этого приложения (тот же package).
+    /// </summary>
+    async Task ChangeSourceAsync(bool folder)
+    {
+        var apps = SelectedApps();
+        if (apps.Count == 0)
+        {
+            Log(T("Выделите приложение в списке автообновления.", "Select an app in the auto-update list."), WarnColor);
+            return;
+        }
+
+        // Диалог открываем там, где лежит текущий источник: после переноса проекта это ближайшая существующая папка.
+        var current = apps[0].Source;
+        var start = Directory.Exists(current) ? current : Path.GetDirectoryName(current);
+        while (!string.IsNullOrEmpty(start) && !Directory.Exists(start)) start = Path.GetDirectoryName(start);
+
+        string path;
+        if (folder)
+        {
+            using var dialog = new FolderBrowserDialog
+            {
+                Description = T("Папка, куда попадают сборки (например app\\build\\outputs\\apk\\release)",
+                    "Folder where builds are placed (for example app\\build\\outputs\\apk\\release)"),
+                UseDescriptionForTitle = true,
+                InitialDirectory = start ?? "",
+                SelectedPath = start ?? "",
+            };
+            if (dialog.ShowDialog(this) != DialogResult.OK) return;
+            path = dialog.SelectedPath;
+        }
+        else
+        {
+            using var dialog = new OpenFileDialog
+            {
+                Filter = "Android APK (*.apk)|*.apk",
+                Title = T("Новый APK для автообновления", "New APK to auto-update"),
+                InitialDirectory = start ?? "",
+            };
+            if (dialog.ShowDialog(this) != DialogResult.OK) return;
+            path = dialog.FileName;
+        }
+
+        var found = await Task.Run(() => ScanSource(path));
+        var changed = 0;
+        foreach (var app in apps)
+        {
+            var builds = found.Where(i => i.Package == app.Package).ToList();
+            if (builds.Count == 0)
+            {
+                Log(T($"{app.Label}: в «{path}» нет APK этого приложения ({app.Package}) — адрес не изменён.",
+                    $"{app.Label}: “{path}” has no APK of this app ({app.Package}) — location not changed."), ErrColor);
+                continue;
+            }
+            app.Source = path;
+            app.Latest = Newest(builds);
+            app.Label = app.Latest.Label;
+            app.SourceError = "";
+            Log(T($"{app.Label}: адрес APK изменён на {path}", $"{app.Label}: APK location changed to {path}"), OkColor);
+            changed++;
+        }
+        if (changed == 0) return;
+
+        settings.Save();
+        RefreshApps();
+        SetupAppWatchers();
+        await AutoCheckAsync(manual: false);
+    }
 
     /// <summary>Выбор телефонов для выделенных приложений (для нескольких — одна настройка на все).</summary>
     async Task EditTargetsAsync()
@@ -618,15 +692,22 @@ public sealed partial class MainForm
 
     /// <summary>
     /// Свежая сборка самого ApkDrop для телефона: из списка автообновления (если ApkDrop там есть)
-    /// или файл ApkDrop-android.apk рядом с ApkDrop.exe (так лежит в папке dist).
+    /// или любой APK самого ApkDrop рядом с ApkDrop.exe (так лежит в папке dist; имя файла не важно).
     /// </summary>
     ApkInfo? PhoneAppBuild()
     {
         var builds = new List<ApkInfo>();
         foreach (var app in settings.Apps.Where(a => a.Package == OwnPackage))
             builds.AddRange(CandidatesFor(app));
-        var bundled = Path.Combine(AppContext.BaseDirectory, "ApkDrop-android.apk");
-        if (File.Exists(bundled) && ReadCached(bundled) is { Package: OwnPackage } b) builds.Add(b);
+        try
+        {
+            foreach (var file in Directory.EnumerateFiles(AppContext.BaseDirectory, "*.apk", SearchOption.TopDirectoryOnly))
+                if (ReadCached(file) is { Package: OwnPackage } b) builds.Add(b);
+        }
+        catch
+        {
+            // Папка с exe недоступна — остаются сборки из списка автообновления.
+        }
         builds.RemoveAll(b => b.VersionCode < RequiredPhoneAppVersionCode);
         return builds.Count == 0 ? null : Newest(builds);
     }
@@ -640,9 +721,11 @@ public sealed partial class MainForm
             if (warnedOutdated.Add(d.Id))
             {
                 Log(T($"{d.Name}: на телефоне старый ApkDrop (протокол {phone.Protocol}) — новые сборки с тем же versionCode " +
-                      "он не различает. Обновите его: отправьте ApkDrop-android.apk из папки dist на вкладке «Отправка APK».",
+                      "он не различает. Обновите его: отправьте APK приложения ApkDrop на вкладке «Отправка APK» " +
+                      "(или положите его рядом с ApkDrop.exe — тогда ПК обновит телефон сам).",
                       $"{d.Name}: the phone has an old ApkDrop (protocol {phone.Protocol}) — it cannot tell apart builds with the same versionCode. " +
-                      "Update it: send ApkDrop-android.apk from the dist folder on the “Send APK” tab."), WarnColor);
+                      "Update it: send the ApkDrop app APK on the “Send APK” tab " +
+                      "(or put it next to ApkDrop.exe — then the PC updates the phone by itself)."), WarnColor);
             }
             return false;
         }

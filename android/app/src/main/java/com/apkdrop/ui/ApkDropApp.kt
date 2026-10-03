@@ -22,25 +22,30 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,6 +69,7 @@ import com.apkdrop.LogEntry
 import com.apkdrop.Net
 import com.apkdrop.Prefs
 import com.apkdrop.R
+import com.apkdrop.SendState
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -75,10 +81,11 @@ class Actions(
     val requestBattery: () -> Unit,
     val currentLanguage: () -> String,
     val setLanguage: (String) -> Unit,
+    val pickApk: () -> Unit,
 )
 
-private val okColor = Color(0xFF2E7D32)
-private val errColor = Color(0xFFC62828)
+internal val okColor = Color(0xFF2E7D32)
+internal val errColor = Color(0xFFC62828)
 
 @Composable
 fun ApkDropApp(prefs: Prefs, tick: Int, actions: Actions) {
@@ -95,13 +102,16 @@ fun ApkDropApp(prefs: Prefs, tick: Int, actions: Actions) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainScreen(prefs: Prefs, tick: Int, actions: Actions) {
-    val context = LocalContext.current
-    val running by DropState.running.collectAsState()
-    val log by DropState.log.collectAsState()
-    val addresses = remember(tick, running) { Net.localAddresses() }
-    val perms = remember(tick) { Permissions.read(context) }
-    var pin by remember { mutableStateOf(prefs.pin) }
-    var autostart by remember { mutableStateOf(prefs.autostart) }
+    var tab by rememberSaveable { mutableIntStateOf(0) }
+
+    // «Открыть с помощью ApkDrop» в файловом менеджере сразу ведёт на вкладку отправки.
+    val openSend by SendState.openSendTab.collectAsState()
+    LaunchedEffect(openSend) {
+        if (openSend) {
+            tab = 1
+            SendState.openSendTab.value = false
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -111,110 +121,133 @@ private fun MainScreen(prefs: Prefs, tick: Int, actions: Actions) {
             )
         },
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier.padding(padding).fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            item {
-                Card(Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(stringResource(R.string.ui_receive), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                            Switch(checked = running, onCheckedChange = actions.setServer, modifier = Modifier.focusRing())
-                        }
-                        when {
-                            !running -> Text(stringResource(R.string.ui_receive_off))
-                            addresses.isEmpty() -> Text(stringResource(R.string.notif_no_wifi), color = errColor)
-                            else -> addresses.forEach {
-                                Text("$it:$HTTP_PORT", fontFamily = FontFamily.Monospace, fontSize = 18.sp)
-                            }
-                        }
-                        HorizontalDivider(Modifier.padding(vertical = 6.dp))
-                        Text(stringResource(R.string.ui_pin_label), style = MaterialTheme.typography.labelLarge)
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                pin.chunked(3).joinToString(" "),
-                                fontFamily = FontFamily.Monospace,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 32.sp,
-                                modifier = Modifier.weight(1f),
-                            )
-                            TextButton(onClick = { pin = prefs.newPin() }, modifier = Modifier.focusRing()) { Text(stringResource(R.string.ui_change)) }
-                        }
-                    }
-                }
+        Column(Modifier.padding(padding).fillMaxSize()) {
+            TabRow(selectedTabIndex = tab) {
+                Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text(stringResource(R.string.tab_receive)) })
+                Tab(selected = tab == 1, onClick = { tab = 1 }, text = { Text(stringResource(R.string.tab_send)) })
             }
-
-            item {
-                Card(Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(stringResource(R.string.ui_setup), style = MaterialTheme.typography.titleMedium)
-                        PermissionRow(
-                            title = stringResource(R.string.perm_install_title),
-                            hint = stringResource(R.string.perm_install_hint),
-                            ok = perms.canInstall,
-                            onFix = actions.openInstallSettings,
-                        )
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                            PermissionRow(
-                                title = stringResource(R.string.perm_notif_title),
-                                hint = stringResource(R.string.perm_notif_hint),
-                                ok = perms.notifications,
-                                onFix = actions.requestNotifications,
-                            )
-                        }
-                        PermissionRow(
-                            title = stringResource(R.string.perm_battery_title),
-                            hint = stringResource(R.string.perm_battery_hint),
-                            ok = perms.battery,
-                            onFix = actions.requestBattery,
-                        )
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Column(Modifier.weight(1f)) {
-                                Text(stringResource(R.string.autostart_title))
-                                Text(stringResource(R.string.autostart_hint), style = MaterialTheme.typography.bodySmall)
-                            }
-                            Switch(
-                                checked = autostart,
-                                onCheckedChange = { autostart = it; prefs.autostart = it },
-                                modifier = Modifier.focusRing(),
-                            )
-                        }
-                        Spacer(Modifier.padding(2.dp))
-                        Text(
-                            stringResource(if (Installer.silentUpdatesSupported) R.string.silent_yes else R.string.silent_no),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    }
-                }
-            }
-
-            item {
-                Text(stringResource(R.string.ui_log), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 4.dp))
-            }
-            if (log.isEmpty()) {
-                item { Text(stringResource(R.string.ui_log_empty)) }
-            }
-            items(log) { LogRow(it) }
-
-            item {
-                val version = remember {
-                    runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull()
-                }
-                Text(
-                    "ApkDrop ${version.orEmpty()} · © $AUTHOR",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(top = 20.dp, bottom = 8.dp),
-                )
-            }
+            if (tab == 1) SendTab(actions) else ReceiveTab(prefs, tick, actions)
         }
     }
 }
 
+@Composable
+private fun ReceiveTab(prefs: Prefs, tick: Int, actions: Actions) {
+    val context = LocalContext.current
+    val running by DropState.running.collectAsState()
+    val log by DropState.log.collectAsState()
+    val addresses = remember(tick, running) { Net.localAddresses() }
+    val perms = remember(tick) { Permissions.read(context) }
+    var pin by remember { mutableStateOf(prefs.pin) }
+    var autostart by remember { mutableStateOf(prefs.autostart) }
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        item {
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(stringResource(R.string.ui_receive), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                        Switch(checked = running, onCheckedChange = actions.setServer, modifier = Modifier.focusRing())
+                    }
+                    when {
+                        !running -> Text(stringResource(R.string.ui_receive_off))
+                        addresses.isEmpty() -> Text(stringResource(R.string.notif_no_wifi), color = errColor)
+                        else -> addresses.forEach {
+                            Text("$it:$HTTP_PORT", fontFamily = FontFamily.Monospace, fontSize = 18.sp)
+                        }
+                    }
+                    HorizontalDivider(Modifier.padding(vertical = 6.dp))
+                    Text(stringResource(R.string.ui_pin_label), style = MaterialTheme.typography.labelLarge)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            pin.chunked(3).joinToString(" "),
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 32.sp,
+                            modifier = Modifier.weight(1f),
+                        )
+                        TextButton(onClick = { pin = prefs.newPin() }, modifier = Modifier.focusRing()) { Text(stringResource(R.string.ui_change)) }
+                    }
+                }
+            }
+        }
+
+        item {
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(stringResource(R.string.ui_setup), style = MaterialTheme.typography.titleMedium)
+                    PermissionRow(
+                        title = stringResource(R.string.perm_install_title),
+                        hint = stringResource(R.string.perm_install_hint),
+                        ok = perms.canInstall,
+                        onFix = actions.openInstallSettings,
+                    )
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        PermissionRow(
+                            title = stringResource(R.string.perm_notif_title),
+                            hint = stringResource(R.string.perm_notif_hint),
+                            ok = perms.notifications,
+                            onFix = actions.requestNotifications,
+                        )
+                    }
+                    PermissionRow(
+                        title = stringResource(R.string.perm_battery_title),
+                        hint = stringResource(R.string.perm_battery_hint),
+                        ok = perms.battery,
+                        onFix = actions.requestBattery,
+                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text(stringResource(R.string.autostart_title))
+                            Text(stringResource(R.string.autostart_hint), style = MaterialTheme.typography.bodySmall)
+                        }
+                        Switch(
+                            checked = autostart,
+                            onCheckedChange = { autostart = it; prefs.autostart = it },
+                            modifier = Modifier.focusRing(),
+                        )
+                    }
+                    Spacer(Modifier.padding(2.dp))
+                    Text(
+                        stringResource(if (Installer.silentUpdatesSupported) R.string.silent_yes else R.string.silent_no),
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+            }
+        }
+
+        item {
+            Text(stringResource(R.string.ui_log), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 4.dp))
+        }
+        if (log.isEmpty()) {
+            item { Text(stringResource(R.string.ui_log_empty)) }
+        }
+        items(log) { LogRow(it) }
+
+        item { Footer() }
+    }
+}
+
 private const val AUTHOR = "Bapuk01"
+
+@Composable
+internal fun Footer() {
+    val context = LocalContext.current
+    val version = remember {
+        runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull()
+    }
+    Text(
+        "ApkDrop ${version.orEmpty()} · © $AUTHOR",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth().padding(top = 20.dp, bottom = 8.dp),
+    )
+}
 
 /** Значок-глобус в верхней панели: меню «Как в системе / English / Русский». */
 @Composable
@@ -251,7 +284,7 @@ private fun LanguageButton(actions: Actions) {
  * а стандартная подсветка Material почти не видна с дивана.
  */
 @Composable
-private fun Modifier.focusRing(shape: Shape = RoundedCornerShape(50)): Modifier {
+internal fun Modifier.focusRing(shape: Shape = RoundedCornerShape(50)): Modifier {
     var focused by remember { mutableStateOf(false) }
     return this
         .onFocusChanged { focused = it.hasFocus }
@@ -274,7 +307,7 @@ private fun PermissionRow(title: String, hint: String, ok: Boolean, onFix: () ->
 private val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
 
 @Composable
-private fun LogRow(entry: LogEntry) {
+internal fun LogRow(entry: LogEntry) {
     // focusable — чтобы журнал можно было пролистать пультом.
     Row(Modifier.fillMaxWidth().focusRing(RoundedCornerShape(6.dp)).focusable().padding(4.dp)) {
         Text(timeFormat.format(Date(entry.time)), fontFamily = FontFamily.Monospace, style = MaterialTheme.typography.bodySmall)

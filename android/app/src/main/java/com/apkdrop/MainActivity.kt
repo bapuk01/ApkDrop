@@ -15,8 +15,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.core.content.ContextCompat
+import androidx.core.content.IntentCompat
 import com.apkdrop.ui.ApkDropApp
 import com.apkdrop.ui.Actions
+import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
 
@@ -26,6 +28,10 @@ class MainActivity : ComponentActivity() {
     private val notificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { resumeTick.intValue++ }
 
+    /** Системный выбор файла для вкладки «Отправить». */
+    private val apkPicker =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(::importApk) }
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(AppLocale.wrap(newBase))
     }
@@ -33,6 +39,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        SendState.init(this)
+        // При пересоздании (поворот, смена языка) тот же intent повторно не разбираем.
+        if (savedInstanceState == null) handleIncoming(intent)
         val prefs = Prefs(this)
         if (prefs.serverEnabled && !DropState.running.value) DropService.start(this)
         if (savedInstanceState == null && !notificationsGranted()) requestNotifications()
@@ -49,10 +58,35 @@ class MainActivity : ComponentActivity() {
             requestBattery = ::requestBatteryExemption,
             currentLanguage = { AppLocale.current(this) },
             setLanguage = { AppLocale.set(this, it) },
+            pickApk = { apkPicker.launch(arrayOf("*/*")) },
         )
         setContent {
             ApkDropApp(prefs = prefs, tick = resumeTick.intValue, actions = actions)
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIncoming(intent)
+    }
+
+    /** «Открыть с помощью ApkDrop» / «Поделиться → ApkDrop» для APK-файла из файлового менеджера. */
+    private fun handleIncoming(intent: Intent?) {
+        val uri: Uri? = when (intent?.action) {
+            Intent.ACTION_VIEW -> intent.data
+            Intent.ACTION_SEND -> IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
+            else -> null
+        }
+        if (uri != null) {
+            importApk(uri)
+            SendState.openSendTab.value = true
+        }
+    }
+
+    /** Файл копируется сразу и не в главном потоке — права на чужой content:// действуют недолго. */
+    private fun importApk(uri: Uri) {
+        thread(name = "apkdrop-import") { SendState.importApk(applicationContext, uri) }
     }
 
     override fun onResume() {

@@ -9,7 +9,9 @@
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <AssemblyName>ApkDrop</AssemblyName>
     <RootNamespace>ApkDrop</RootNamespace>
-    <Version>1.6.0</Version>
+    <Version>1.7.0</Version>
+    <!-- Без хеша коммита в версии файла: «1.7.0», а не «1.7.0+22f254d…» -->
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <Product>ApkDrop</Product>
     <Authors>Bapuk01</Authors>

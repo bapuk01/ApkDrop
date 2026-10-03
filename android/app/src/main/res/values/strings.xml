@@ -71,4 +71,71 @@
     <string name="ui_language_system">System default</string>
     <string name="ui_log">Log</string>
     <string name="ui_log_empty">Nothing yet. On the PC, start ApkDrop and drop an APK onto the window.</string>
+
+    <!-- Вкладка «Отправить» -->
+    <string name="tab_receive">Receive</string>
+    <string name="tab_send">Send</string>
+    <string name="send_apk_title">APK to send</string>
+    <string name="send_apk_none">No file selected. Choose an APK on this phone, or open one with ApkDrop from a file manager.</string>
+    <string name="send_pick">Choose APK</string>
+    <string name="send_pick_other">Choose another</string>
+    <string name="send_apk_version">Version %1$s (%2$d) · %3$s</string>
+    <string name="send_apk_busy">Wait for the current transfer to finish</string>
+    <string name="send_apk_copy_failed">Could not read the file: %s</string>
+    <string name="send_apk_invalid">The selected file is not a valid APK</string>
+    <string name="send_devices_title">Devices</string>
+    <string name="send_devices_hint">checked — where to send</string>
+    <string name="send_find">Find</string>
+    <string name="send_finding">Searching…</string>
+    <string name="send_add_ip">Add by IP</string>
+    <string name="send_devices_empty">No devices yet. Tap “Find”, or add one by IP (shown in ApkDrop on that device).</string>
+    <string name="send_launch">Launch the app after installing</string>
+    <string name="send_button">Send</string>
+    <string name="send_button_busy">Sending…</string>
+    <string name="send_need_apk">Choose an APK first</string>
+    <string name="send_need_devices">Check at least one device</string>
+    <string name="send_not_apkdrop">this address is not ApkDrop</string>
+    <string name="send_notif_title">Sending to devices</string>
+    <string name="send_notif_text">Sending to %s…</string>
+    <string name="pin_dialog_title">PIN of %s</string>
+    <string name="pin_dialog_text">Enter the PIN shown in ApkDrop on that device.</string>
+    <string name="add_ip_title">Add device</string>
+    <string name="add_ip_hint">IP address shown in ApkDrop on that device, for example 192.168.1.23</string>
+    <string name="add_ip_label">IP address</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+
+    <!-- Статусы устройств -->
+    <string name="st_online">online</string>
+    <string name="st_not_found">not found</string>
+    <string name="st_offline">offline</string>
+    <string name="st_need_pin">PIN required</string>
+    <string name="st_wrong_pin">wrong PIN</string>
+    <string name="st_locked">PIN locked for a minute</string>
+    <string name="st_connecting">connecting…</string>
+    <string name="st_sending">sending %d%%</string>
+    <string name="st_installing">installing…</string>
+    <string name="st_confirm">confirm the install on that device</string>
+    <string name="st_error">error</string>
+    <string name="st_no_permission">online, but app installs are not allowed there</string>
+
+    <!-- Журнал отправки -->
+    <string name="sl_found">Found: %s</string>
+    <string name="sl_none">No devices found. Check they are on the same Wi-Fi network and ApkDrop is open with receiving on. You can also add a device by IP.</string>
+    <string name="sl_added">Added %1$s (%2$s)</string>
+    <string name="sl_add_failed">Could not connect to %1$s — %2$s</string>
+    <string name="sl_sending">%1$s: sending %2$s (%3$s)</string>
+    <string name="sl_parsed">%1$s: %2$s %3$s (versionCode %4$d); there: %5$s</string>
+    <string name="sl_not_installed">not installed</string>
+    <string name="sl_confirm">%s: confirm the install on that device</string>
+    <string name="sl_self_update">%s: ApkDrop itself is being updated — the connection will drop, that is expected.</string>
+    <string name="sl_pin_wrong">%s: wrong PIN — enter it again</string>
+    <string name="sl_pin_locked">%s: too many wrong PINs — the device refuses attempts for a minute.</string>
+    <string name="sl_offline">%s: no answer. Open ApkDrop on it and check that it is on the same Wi-Fi network.</string>
+    <string name="sl_conn_error">%1$s: connection error — %2$s</string>
+    <string name="sl_not_launched">Not launched: %s</string>
+    <string name="err_rejected">the device rejected the file (%1$d): %2$s</string>
+    <string name="self_update_ok">ApkDrop on the device updated and is restarting (the dropped connection is expected)</string>
+    <string name="closed_no_result">the device closed the connection without a result</string>
+    <string name="launched_suffix">, launched</string>
 </resources>

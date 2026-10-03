@@ -69,4 +69,71 @@
     <string name="ui_language_system">Как в системе</string>
     <string name="ui_log">Журнал</string>
     <string name="ui_log_empty">Пока пусто. На ПК запустите ApkDrop и перетащите APK в окно.</string>
+
+    <!-- Вкладка «Отправить» -->
+    <string name="tab_receive">Получить</string>
+    <string name="tab_send">Отправить</string>
+    <string name="send_apk_title">APK для отправки</string>
+    <string name="send_apk_none">Файл не выбран. Выберите APK на телефоне или откройте его через ApkDrop из файлового менеджера.</string>
+    <string name="send_pick">Выбрать APK</string>
+    <string name="send_pick_other">Выбрать другой</string>
+    <string name="send_apk_version">Версия %1$s (%2$d) · %3$s</string>
+    <string name="send_apk_busy">Дождитесь окончания текущей отправки</string>
+    <string name="send_apk_copy_failed">Не удалось прочитать файл: %s</string>
+    <string name="send_apk_invalid">Выбранный файл не является корректным APK</string>
+    <string name="send_devices_title">Устройства</string>
+    <string name="send_devices_hint">галочка — куда отправлять</string>
+    <string name="send_find">Найти</string>
+    <string name="send_finding">Поиск…</string>
+    <string name="send_add_ip">Добавить по IP</string>
+    <string name="send_devices_empty">Устройств пока нет. Нажмите «Найти» или добавьте по IP (он показан в ApkDrop на нужном устройстве).</string>
+    <string name="send_launch">Запускать приложение после установки</string>
+    <string name="send_button">Отправить</string>
+    <string name="send_button_busy">Отправка…</string>
+    <string name="send_need_apk">Сначала выберите APK</string>
+    <string name="send_need_devices">Отметьте хотя бы одно устройство</string>
+    <string name="send_not_apkdrop">по этому адресу отвечает не ApkDrop</string>
+    <string name="send_notif_title">Отправка на устройства</string>
+    <string name="send_notif_text">Отправка на %s…</string>
+    <string name="pin_dialog_title">PIN устройства «%s»</string>
+    <string name="pin_dialog_text">Введите PIN, который показан в ApkDrop на этом устройстве.</string>
+    <string name="add_ip_title">Добавить устройство</string>
+    <string name="add_ip_hint">IP-адрес, который показан в ApkDrop на этом устройстве, например 192.168.1.23</string>
+    <string name="add_ip_label">IP-адрес</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Отмена</string>
+
+    <!-- Статусы устройств -->
+    <string name="st_online">в сети</string>
+    <string name="st_not_found">не найден</string>
+    <string name="st_offline">не в сети</string>
+    <string name="st_need_pin">нужен PIN</string>
+    <string name="st_wrong_pin">неверный PIN</string>
+    <string name="st_locked">PIN заблокирован на минуту</string>
+    <string name="st_connecting">подключение…</string>
+    <string name="st_sending">отправка %d%%</string>
+    <string name="st_installing">установка…</string>
+    <string name="st_confirm">подтвердите установку на устройстве</string>
+    <string name="st_error">ошибка</string>
+    <string name="st_no_permission">в сети, но там не выдано разрешение на установку</string>
+
+    <!-- Журнал отправки -->
+    <string name="sl_found">Найдено: %s</string>
+    <string name="sl_none">Устройства не найдены. Проверьте, что они в той же Wi-Fi сети, ApkDrop открыт и приём включён. Можно добавить устройство по IP.</string>
+    <string name="sl_added">Добавлено: %1$s (%2$s)</string>
+    <string name="sl_add_failed">Не удалось подключиться к %1$s — %2$s</string>
+    <string name="sl_sending">%1$s: отправляю %2$s (%3$s)</string>
+    <string name="sl_parsed">%1$s: %2$s %3$s (versionCode %4$d); на устройстве: %5$s</string>
+    <string name="sl_not_installed">не установлено</string>
+    <string name="sl_confirm">%s: подтвердите установку на устройстве</string>
+    <string name="sl_self_update">%s: обновляется сам ApkDrop — связь прервётся, это нормально.</string>
+    <string name="sl_pin_wrong">%s: неверный PIN — введите его заново</string>
+    <string name="sl_pin_locked">%s: слишком много неверных PIN — устройство не принимает попытки минуту.</string>
+    <string name="sl_offline">%s: нет ответа. Откройте на нём ApkDrop и проверьте, что он в той же Wi-Fi сети.</string>
+    <string name="sl_conn_error">%1$s: ошибка связи — %2$s</string>
+    <string name="sl_not_launched">Не запущено: %s</string>
+    <string name="err_rejected">устройство отклонило файл (%1$d): %2$s</string>
+    <string name="self_update_ok">ApkDrop на устройстве обновился и перезапускается (обрыв связи — это нормально)</string>
+    <string name="closed_no_result">устройство закрыло соединение, не сообщив результат</string>
+    <string name="launched_suffix">, запущено</string>
 </resources>
