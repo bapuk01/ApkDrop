@@ -9,8 +9,8 @@
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <AssemblyName>ApkDrop</AssemblyName>
     <RootNamespace>ApkDrop</RootNamespace>
-    <Version>1.7.0</Version>
-    <!-- Без хеша коммита в версии файла: «1.7.0», а не «1.7.0+22f254d…» -->
+    <Version>1.8.0</Version>
+    <!-- Без хеша коммита в версии файла: «1.8.0», а не «1.8.0+22f254d…» -->
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <Product>ApkDrop</Product>
@@ -18,6 +18,11 @@
     <Company>Bapuk01</Company>
     <Copyright>© Bapuk01</Copyright>
     <Description>Установка и обновление APK на телефоны и Android TV по Wi-Fi</Description>
+  </PropertyGroup>
+
+  <!-- Автономная сборка (.NET внутри exe) обновляется файлом ApkDrop-standalone.exe, обычная — ApkDrop.exe -->
+  <PropertyGroup Condition="'$(SelfContained)' == 'true'">
+    <DefineConstants>$(DefineConstants);STANDALONE</DefineConstants>
   </PropertyGroup>
 
 </Project>

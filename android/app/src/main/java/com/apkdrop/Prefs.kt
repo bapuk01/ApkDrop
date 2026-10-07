@@ -33,4 +33,14 @@ class Prefs(context: Context) {
     var serverEnabled: Boolean
         get() = sp.getBoolean("server_enabled", true)
         set(value) = sp.edit().putBoolean("server_enabled", value).apply()
+
+    /** Искать новую версию ApkDrop на GitHub при открытии приложения. */
+    var checkUpdates: Boolean
+        get() = sp.getBoolean("check_updates", true)
+        set(value) = sp.edit().putBoolean("check_updates", value).apply()
+
+    /** Тег релиза, который пользователь выбрал «Пропустить версию». */
+    var skippedVersion: String
+        get() = sp.getString("skipped_version", "").orEmpty()
+        set(value) = sp.edit().putString("skipped_version", value).apply()
 }

@@ -54,6 +54,10 @@ public sealed class AppSettings
     public string Language { get; set; } = "auto";
     /// <summary>"auto" (как в Windows), "light" или "dark".</summary>
     public string ThemeMode { get; set; } = "auto";
+    /// <summary>Искать новую версию на GitHub при запуске.</summary>
+    public bool CheckUpdates { get; set; } = true;
+    /// <summary>Тег релиза, который пользователь выбрал «Пропустить версию».</summary>
+    public string? SkippedVersion { get; set; }
 
     /// <summary>Портативный режим: settings.json рядом с ApkDrop.exe важнее, чем в %APPDATA%.</summary>
     static string Dir => File.Exists(Path.Combine(AppContext.BaseDirectory, "settings.json"))

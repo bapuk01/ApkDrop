@@ -7,6 +7,7 @@ static class Program
     static void Main(string[] args)
     {
         ApplicationConfiguration.Initialize();
+        UpdateChecker.CleanupOld(); // остатки прошлого обновления
         // Язык и тема нужны до создания окна: из них строятся все подписи и цвета.
         var settings = AppSettings.Load();
         L.Init(settings.Language);

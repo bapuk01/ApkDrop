@@ -141,6 +141,7 @@ public sealed partial class MainForm : Form
         {
             Theme.FitLastColumn(devices);
             Theme.FitLastColumn(appsList);
+            _ = CheckForUpdatesAsync(manual: false); // в фоне: медленная сеть не задерживает поиск телефонов
             await DiscoverAsync();
             if (startupApk != null) await SendAsync();
             await AutoCheckAsync(manual: false);
@@ -272,6 +273,16 @@ public sealed partial class MainForm : Form
         }
         menu.Items.Add(language);
         menu.Items.Add(theme);
+        menu.Items.Add(new ToolStripSeparator());
+        var check = new ToolStripMenuItem(T("Проверять обновления при запуске", "Check for updates on start")) { Checked = settings.CheckUpdates };
+        check.Click += (_, _) =>
+        {
+            // Применяется сразу, перезапуск не нужен.
+            settings.CheckUpdates = !settings.CheckUpdates;
+            settings.Save();
+        };
+        menu.Items.Add(check);
+        menu.Items.Add(T("Проверить обновления сейчас", "Check for updates now"), null, (_, _) => _ = CheckForUpdatesAsync(manual: true));
         Theme.Style(menu);
         return menu;
     }

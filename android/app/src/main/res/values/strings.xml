@@ -138,4 +138,28 @@
     <string name="self_update_ok">ApkDrop on the device updated and is restarting (the dropped connection is expected)</string>
     <string name="closed_no_result">the device closed the connection without a result</string>
     <string name="launched_suffix">, launched</string>
+
+    <!-- Обновление ApkDrop -->
+    <string name="upd_title">Update available</string>
+    <string name="upd_text">ApkDrop %1$s is available (you have %2$s).</string>
+    <string name="upd_now">Update</string>
+    <string name="upd_later">Later</string>
+    <string name="upd_skip">Skip this version</string>
+    <string name="upd_downloading">Downloading update…</string>
+    <string name="upd_progress">%1$s of %2$s</string>
+    <string name="upd_cancel">Cancel</string>
+    <string name="upd_failed_title">Could not update</string>
+    <string name="upd_open_page">Release page</string>
+    <string name="upd_close">Close</string>
+    <string name="upd_err_no_apk">the release has no APK file</string>
+    <string name="upd_err_no_checksum">the release has no checksum for the APK</string>
+    <string name="upd_err_checksum">the downloaded file failed the checksum check</string>
+    <string name="upd_err_size">the file was not downloaded completely</string>
+    <string name="upd_err_package">the downloaded file is not ApkDrop</string>
+    <string name="upd_err_permission">allow “Install apps” for ApkDrop first (the Setup card on the Receive tab)</string>
+    <string name="upd_log_latest">You have the latest version (%s)</string>
+    <string name="upd_log_check_failed">Could not check for updates: %s</string>
+    <string name="upd_setting_title">Check for updates on start</string>
+    <string name="upd_setting_hint">Looks for a new version on GitHub</string>
+    <string name="upd_check_now">Check now</string>
 </resources>

@@ -136,4 +136,28 @@
     <string name="self_update_ok">ApkDrop на устройстве обновился и перезапускается (обрыв связи — это нормально)</string>
     <string name="closed_no_result">устройство закрыло соединение, не сообщив результат</string>
     <string name="launched_suffix">, запущено</string>
+
+    <!-- Обновление ApkDrop -->
+    <string name="upd_title">Доступно обновление</string>
+    <string name="upd_text">Доступна версия ApkDrop %1$s (у вас %2$s).</string>
+    <string name="upd_now">Обновить</string>
+    <string name="upd_later">Позже</string>
+    <string name="upd_skip">Пропустить версию</string>
+    <string name="upd_downloading">Скачивание обновления…</string>
+    <string name="upd_progress">%1$s из %2$s</string>
+    <string name="upd_cancel">Отмена</string>
+    <string name="upd_failed_title">Не удалось обновить</string>
+    <string name="upd_open_page">Страница релиза</string>
+    <string name="upd_close">Закрыть</string>
+    <string name="upd_err_no_apk">в релизе нет APK-файла</string>
+    <string name="upd_err_no_checksum">в релизе нет контрольной суммы APK</string>
+    <string name="upd_err_checksum">скачанный файл не прошёл проверку контрольной суммы</string>
+    <string name="upd_err_size">файл скачался не полностью</string>
+    <string name="upd_err_package">скачанный файл — не ApkDrop</string>
+    <string name="upd_err_permission">сначала разрешите ApkDrop «Установку приложений» (блок «Настройка» на вкладке «Получить»)</string>
+    <string name="upd_log_latest">Установлена последняя версия (%s)</string>
+    <string name="upd_log_check_failed">Не удалось проверить обновления: %s</string>
+    <string name="upd_setting_title">Проверять обновления при запуске</string>
+    <string name="upd_setting_hint">Ищет новую версию на GitHub</string>
+    <string name="upd_check_now">Проверить сейчас</string>
 </resources>

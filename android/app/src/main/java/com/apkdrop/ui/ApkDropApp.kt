@@ -70,6 +70,7 @@ import com.apkdrop.Net
 import com.apkdrop.Prefs
 import com.apkdrop.R
 import com.apkdrop.SendState
+import com.apkdrop.UpdateState
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -129,6 +130,8 @@ private fun MainScreen(prefs: Prefs, tick: Int, actions: Actions) {
             if (tab == 1) SendTab(actions) else ReceiveTab(prefs, tick, actions)
         }
     }
+
+    UpdateDialogHost()
 }
 
 @Composable
@@ -140,6 +143,7 @@ private fun ReceiveTab(prefs: Prefs, tick: Int, actions: Actions) {
     val perms = remember(tick) { Permissions.read(context) }
     var pin by remember { mutableStateOf(prefs.pin) }
     var autostart by remember { mutableStateOf(prefs.autostart) }
+    var checkUpdates by remember { mutableStateOf(prefs.checkUpdates) }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -210,6 +214,20 @@ private fun ReceiveTab(prefs: Prefs, tick: Int, actions: Actions) {
                             onCheckedChange = { autostart = it; prefs.autostart = it },
                             modifier = Modifier.focusRing(),
                         )
+                    }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text(stringResource(R.string.upd_setting_title))
+                            Text(stringResource(R.string.upd_setting_hint), style = MaterialTheme.typography.bodySmall)
+                        }
+                        Switch(
+                            checked = checkUpdates,
+                            onCheckedChange = { checkUpdates = it; prefs.checkUpdates = it },
+                            modifier = Modifier.focusRing(),
+                        )
+                    }
+                    TextButton(onClick = { UpdateState.check(context, manual = true) }, modifier = Modifier.focusRing()) {
+                        Text(stringResource(R.string.upd_check_now))
                     }
                     Spacer(Modifier.padding(2.dp))
                     Text(

@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         SendState.init(this)
+        UpdateState.checkOnStart(this) // раз за запуск процесса; без сети тихо ничего не делает
         // При пересоздании (поворот, смена языка) тот же intent повторно не разбираем.
         if (savedInstanceState == null) handleIncoming(intent)
         val prefs = Prefs(this)
